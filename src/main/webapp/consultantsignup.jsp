@@ -245,157 +245,162 @@
 
 
         <div class="navbar">
-            <a href="Home.jsp">Home</a>
-            <a href="ConsultantSignIn.jsp">About Us</a>
-            <button onclick="document.getElementById('id01').style.display = 'block'" style="width:auto;">Register/SignIn</button>
+            <a href="home.jsp">Home</a>
+            <a href="home.jsp">About Us</a>
+            <button onclick="redirectToMultiUserLogin()" style="width:auto;">Register/SignIn</button>
+
+            <script>
+                function redirectToMultiUserLogin() {
+                    window.location.href = 'multiuserlogin.jsp';
+                }
+            </script>
+
         </div>
-
-
-        <div class="custom-container">
-            <div class="login-box">
-                Create a Consultant Account
+            <div class="custom-container">
+                <div class="login-box">
+                    Create a Consultant Account
+                </div>
             </div>
+
+
+
+
+
+            <div class="container form-container">
+                <h1 class="text-center"></h1>
+                <form id="registrationForm" action="Consultantsignupservlet" method="post">
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="fname"><b>First Name</b></label>
+                            <input type="text" name="fname" class="form-control" id="fname" placeholder="Enter First Name">
+                            <small id="fname_alert"></small>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="lname"><b>Last Name</b></label>
+                            <input type="text"  name="lname" class="form-control" id="lname" placeholder="Enter Last Name">
+                            <small id="lname_alert"></small>
+                        </div>
+                    </div>
+
+
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="email"><b>Email Address</b> </label>
+                            <input type="email"  name="email" class="form-control" id="email" placeholder="Enter Email Address">
+                            <small id="email_alert"></small>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="password"><b>Password</b> </label>
+                            <input type="password"  name="password" class="form-control" id="password" placeholder="Enter Password">
+                            <small id="password_alert"></small>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+
+                        <div class="col-md-6 form-group">
+                            <label for="phoneNumber"><b>Phone Number</b></label>
+                            <input type="text" name="phone" class="form-control" id="phoneNumber" placeholder="Enter Phone Number">
+                            <small id="phoneNumber_alert"></small>
+                        </div>
+                        <div class="col-md-6 form-group">
+                            <label for="searchCountries"><b>Specialized Countries </b></label>
+                            <input type="text" name="specializedCountries" class="form-control" id="specializedCountries" placeholder="Search and Add Countries">
+                            <small id="specializedCountries_alert"></small>
+                            <div id="specializedCountries"></div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            <label for="workingPeriod"><b>Working Period</b> </label>
+                            <textarea class="form-control" name ="workingPeriod" id="workingPeriod" placeholder="Enter Working Period"></textarea>
+                            <small id="workingPeriod_alert"></small>
+                        </div>
+
+                    </div>
+                    <br>
+                    <label style="display: flex; justify-content: center; align-items: center; font-size: 14px;">
+                        <input type="checkbox" name="privacyCheckbox" id="privacyCheckbox" style="margin-right: 5px;">
+                        <b>  I agree to the Job Ceylon Consultation Center's&nbsp;&nbsp;</b><a href="Privacypolicy.jsp" style="color: seagreen; text-decoration: none;" target="blank"><b>privacy policy</b></a>
+                    </label>
+
+            </div>
+            <br>
+
+
+
+
+            <button type="submit" onclick="GetData();" class="btn-submit">Register</button>
+            <br><br>
+            <button class="form-link-button" type="button" onclick="window.location.href = 'multiuserlogin.jsp';">Already have an Account?</button>
+
+            <script>
+                function redirectToMultiUserLogin() {
+                    window.location.href = 'multiuserlogin.jsp';
+                }
+            </script>
+            <button class="create-account-button" type="button" onclick="window.location.href = 'jobseekersignup.jsp';">Create an Account - Job Seeker</button> <br><br> 
+
+
+            </form>
         </div>
 
-
-
-
-
-        <div class="container form-container">
-            <h1 class="text-center"></h1>
-            <form id="registrationForm" action="Consultantsignupservlet" method="post">
-                <div class="row">
-                    <div class="col-md-6 form-group">
-                        <label for="fname"><b>First Name</b></label>
-                        <input type="text" name="fname" class="form-control" id="fname" placeholder="Enter First Name">
-                        <small id="fname_alert"></small>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label for="lname"><b>Last Name</b></label>
-                        <input type="text"  name="lname" class="form-control" id="lname" placeholder="Enter Last Name">
-                        <small id="lname_alert"></small>
-                    </div>
-                </div>
-
-
-                <div class="row">
-                    <div class="col-md-6 form-group">
-                        <label for="email"><b>Email Address</b> </label>
-                        <input type="email"  name="email" class="form-control" id="email" placeholder="Enter Email Address">
-                        <small id="email_alert"></small>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label for="password"><b>Password</b> </label>
-                        <input type="password"  name="password" class="form-control" id="password" placeholder="Enter Password">
-                        <small id="password_alert"></small>
-                    </div>
-                </div>
-
-                <div class="row">
-
-
-                    <div class="col-md-6 form-group">
-                        <label for="phoneNumber"><b>Phone Number</b></label>
-                        <input type="text" name="phone" class="form-control" id="phoneNumber" placeholder="Enter Phone Number">
-                        <small id="phoneNumber_alert"></small>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label for="searchCountries"><b>Specialized Countries </b></label>
-                        <input type="text" name="specializedCountries" class="form-control" id="specializedCountries" placeholder="Search and Add Countries">
-                        <small id="specializedCountries_alert"></small>
-                        <div id="specializedCountries"></div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6 form-group">
-                        <label for="workingPeriod"><b>Working Period</b> </label>
-                        <textarea class="form-control" name ="workingPeriod" id="workingPeriod" placeholder="Enter Working Period"></textarea>
-                        <small id="workingPeriod_alert"></small>
-                    </div>
-
-                </div>
-                <br>
-                <label style="display: flex; justify-content: center; align-items: center; font-size: 14px;">
-                    <input type="checkbox" name="privacyCheckbox" id="privacyCheckbox" style="margin-right: 5px;">
-                    <b>  I agree to the Job Ceylon Consultation Center's&nbsp;&nbsp;</b><a href="Privacypolicy.jsp" style="color: seagreen; text-decoration: none;" target="blank"><b>privacy policy</b></a>
-                </label>
-
-        </div>
-        <br>
-
-
-
-
-        <button type="submit" onclick="GetData();" class="btn-submit">Register</button>
-        <br><br>
-        <button class="form-link-button" type="button" onclick="window.location.href = 'multiuserlogin.jsp';">Already have an Account?</button>
 
         <script>
-            function redirectToMultiUserLogin() {
-                window.location.href = 'home.jsp';
+            function validateForm() {
+                var email = document.getElementById("email").value;
+                var password = document.getElementById("password").value;
+                var privacyCheckbox = document.getElementById("privacyCheckbox").checked;
+                var isValid = true;
+
+                if (email === "") {
+                    document.getElementById("email_alert").textContent = "Email is required.";
+                    document.getElementById("email_alert").style.color = "red";
+                    isValid = false;
+                } else {
+                    document.getElementById("email_alert").textContent = "";
+                }
+
+                if (password === "") {
+                    document.getElementById("password_alert").textContent = "Password is required.";
+                    document.getElementById("password_alert").style.color = "red";
+                    isValid = false;
+                } else {
+                    document.getElementById("password_alert").textContent = "";
+                }
+
+                if (!privacyCheckbox) {
+                    document.getElementById("privacy_alert").textContent = "You must agree to the Privacy Policy.";
+                    isValid = false;
+                } else {
+                    document.getElementById("privacy_alert").textContent = "";
+                }
+
+                return isValid;
+            }
+
+            function GetData() {
+                console.log("Button clicked!"); // Add this line
+
+                if (validateForm()) {
+                    // Proceed with registration
+                    // You can add your registration logic here
+
+                    var successMessage = "Consultant details saved successfully.";
+                    var errorMessage = "Failed to save onsultant details.";
+                    var isSuccess = true;
+
+                    if (isSuccess) {
+                        alert(successMessage);
+                    } else {
+                        alert(errorMessage);
+                    }
+                }
             }
         </script>
-        <button class="create-account-button" type="button" onclick="window.location.href = 'jobseekersignup.jsp';">Create an Account - Job Seeker</button> <br><br> 
 
 
-    </form>
-</div>
-
-
-<script>
-    function validateForm() {
-        var email = document.getElementById("email").value;
-        var password = document.getElementById("password").value;
-        var privacyCheckbox = document.getElementById("privacyCheckbox").checked;
-        var isValid = true;
-
-        if (email === "") {
-            document.getElementById("email_alert").textContent = "Email is required.";
-            document.getElementById("email_alert").style.color = "red";
-            isValid = false;
-        } else {
-            document.getElementById("email_alert").textContent = "";
-        }
-
-        if (password === "") {
-            document.getElementById("password_alert").textContent = "Password is required.";
-            document.getElementById("password_alert").style.color = "red";
-            isValid = false;
-        } else {
-            document.getElementById("password_alert").textContent = "";
-        }
-
-        if (!privacyCheckbox) {
-            document.getElementById("privacy_alert").textContent = "You must agree to the Privacy Policy.";
-            isValid = false;
-        } else {
-            document.getElementById("privacy_alert").textContent = "";
-        }
-
-        return isValid;
-    }
-
-    function GetData() {
-            console.log("Button clicked!"); // Add this line
-
-        if (validateForm()) {
-            // Proceed with registration
-            // You can add your registration logic here
-
-            var successMessage = "Consultant details saved successfully.";
-            var errorMessage = "Failed to save onsultant details.";
-            var isSuccess = true;
-
-            if (isSuccess) {
-                alert(successMessage);
-            } else {
-                alert(errorMessage);
-            }
-        }
-    }
-</script>
-
-
-</body>
+    </body>
 </html>

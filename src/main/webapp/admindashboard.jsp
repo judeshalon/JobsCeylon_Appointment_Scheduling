@@ -1,3 +1,5 @@
+<%@page import="com.entity.Appointment"%>
+<%@page import="com.dao.AppointmentDao"%>
 <%@page import="com.entity.Admin"%>
 <%@page import="com.dao.AdminDao"%>
 <%@page import="com.dao.JobSeekerDao"%>
@@ -287,7 +289,7 @@
                 <h2>Consultant Details</h2>
                 <div class="flex-container">
                     <div class="user-table">
-                <a  href="createConsultant.jsp">Add Consultant </a>
+                        <a  href="createConsultant.jsp">Add Consultant </a>
                         <br> <br>
                         <table class="table">
                             <thead>
@@ -320,7 +322,7 @@
                                        class="btn btn-sm btn-primary" >Edit</a> 
 
                                     <a
-                                        href="../deleteConsultant?id=<%=d.getId()%>"
+                                        href="deleteConsultant.jsp?id=<%=d.getId()%>"
                                         class="btn btn-sm btn-danger">Delete</a></td>
                             </tr>
                             <%
@@ -370,9 +372,7 @@
                 <h2>Job Seeker Details</h2>
                 <div class="flex-container">
                     <div class="user-table">
-                        <div class="button-container">
-                            <button id="add-jobseeker-btn" class="add-button">Add Job Seeker</button>
-                        </div>
+                        <a  href="createJobseeker.jsp">Add Job Seeker </a>
                         <br><br>
                         <table class="table">
                             <thead>
@@ -403,7 +403,7 @@
                                     <td>
                                         <a href="editjobseeker.jsp?id=<%= jobseeker.getId()%>"
                                            class="btn btn-sm btn-primary">Edit</a>
-                                        <a href="../deleteJobseeker?id=<%= jobseeker.getId()%>"
+                                        <a href="deleteJobseeker.jsp?id=<%= jobseeker.getId()%>"
                                            class="btn btn-sm btn-danger">Delete</a>
                                     </td>
                                 </tr>
@@ -449,44 +449,52 @@
                 addJobSeekerButton.addEventListener('click', addNewRow);
             </script>
 
-
+            
             <!<!-- APPOINTMENT MANAGEMENT -->
             <section class="section" id="appointment-details">
                 <h2>Appointment Details</h2>
                 <div class="flex-container">
                     <div class="user-table">
-                <a  href="createConsultant.jsp">Add Consultant </a>
+                        <a href="createAppointment.jsp">Add Appointment</a>
                         <br><br>
                         <table>
                             <thead>
                                 <tr>
                                     <th>Appointment ID</th>
-                                    <th>Consultant</th>
-                                    <th>Job Seeker</th>
+                                    <th>Consultant ID</th>
+                                    <th>Job Seeker ID</th>
                                     <th>Date and Time</th>
-                                    <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="appointment-details"> <!-- Added ID for the tbody element -->
-                                <!-- Example appointment data (replace with dynamic data from your backend) -->
+                            <tbody id="appointment-details-body">
+                                <%
+                                    AppointmentDao dao = new AppointmentDao(dbconnect.getConn());
+                                    List<Appointment> appointmentList = dao.getAllAppointment();
+                                    for (Appointment appointment : appointmentList) {
+                                %>
                                 <tr>
-                                    <td>1</td>
-                                    <td>John Doe</td>
-                                    <td>Jane Smith</td>
-                                    <td>2023-08-20 10:00 AM</td>
-                                    <td>Confirmed</td>
+                                    <td><%= appointment.getId()%></td>
+                                    <td><%= appointment.getConsultant_id()%></td>
+                                    <td><%= appointment.getJobseeker_id()%></td>
+                                    <td><%= appointment.getAppointment_datetime()%></td>
                                     <td>
-                                        <a href="#">Reschedule</a> |
-                                        <a href="#">Cancel</a>
+                                        <a href="appointmentRescheduling.jsp?id=<%= appointment.getId()%>"
+                                           class="btn btn-sm btn-primary">Rescheduling</a>
+                                        <a href="appointmentCancel.jsp?id=<%= appointment.getId()%>"
+                                           class="btn btn-sm btn-danger">Cancel</a>
                                     </td>
                                 </tr>
                                 <!-- Add more appointment rows as needed -->
+                                <%
+                                    }
+                                %>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </section>
+
 
             <script>
                 // Function to add a new row to the appointment table
@@ -498,13 +506,13 @@
                     <tr>
                 <td>New ID</td>
                 <td>New Consultant</td>
-            <td>New Job Seeker</td>
+                <td>New Job Seeker</td>
                 <td>New Date and Time</td>
-                <td>
+            <td>
             <a href="#">Reschedule</a> |
-            <a href="#">Cancel</a>
-                </td>
-                </tr>
+                <a href="#">Cancel</a>
+            </td>
+            </tr>
 
                 }
 

@@ -143,4 +143,27 @@ public class JobSeekerDao {
 
     return f;
 }
+
+public boolean deleteJobseekerById(int id) {
+    boolean f = false;
+
+    try {
+        String sql = "DELETE FROM jobseeker_dtls WHERE id=?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+
+            int i = ps.executeUpdate();
+
+            if (i == 1) {
+                f = true; // Set to true if one row is affected, indicating successful deletion
+            }
+        }
+    } catch (SQLException e) {
+        // Handle the exception gracefully, either by throwing a custom 
+        // exception or logging the error.
+        e.printStackTrace();
+    }
+
+    return f;
+}
 }

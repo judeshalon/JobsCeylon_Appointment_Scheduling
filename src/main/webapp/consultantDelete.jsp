@@ -1,14 +1,20 @@
 <%-- 
-    Document   : jobseekersignup
-    Created on : 22-Aug-2023, 02:55:30
-    Author     : Joy Chuzana
+    Document   : ConsultantSignUp.jsp
+    Created on : 10-Aug-2023, 18:28:53
+    Author     : Jude Shalon
 --%>
+<%@page import="java.util.List"%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="com.db.dbconnect"%>
+<%@page import="com.entity.Consultant"%>
+<%@page import="com.dao.ConsultantDao"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
-        <title>MultiUserLogin | Job Seeker Create Page</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Admin DashBoard | Delete Consultant</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <style>
             /* -------------- NAV BAR STYLE ---------------- */
@@ -117,9 +123,11 @@
                 border: 1px solid #ccc;
                 border-radius: 5px;
                 box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                padding: 60px;
+                padding: 40px;
                 box-sizing: border-box;
                 margin-top: 40px;
+                height: 800px; /* Set the height to 1000px */
+
             }
             .table-container {
                 margin-top: 30px;
@@ -136,12 +144,10 @@
             }
 
             /* Make specified mandatory labels red */
-            label[for="jobseekerId"]:after,
             label[for="email"]:after,
             label[for="password"]:after,
-            label[for="interestedCountries"]:after,
-            label[for="interestedJobs"]:after
-            {
+            label[for="experience"]:after,
+            label[for="cvUpload"]:after {
                 content: "*";
                 color: red;
                 margin-right: 5px;
@@ -168,7 +174,8 @@
 
             }
             .btn-submit {
-                background-color:lightseagreen;
+                background-color: lightseagreen;
+                margin-top: -350px;
 
             }
             .search-countries {
@@ -196,6 +203,7 @@
                 margin: 10px auto; /* Center the button horizontally */
                 display: block; /* Make the button a block element for margin auto to work */
                 cursor: pointer;
+                margin-top: -350px;
 
                 position: absolute; /* Position absolutely within the container */
                 left: 50%; /* Move to the horizontal center */
@@ -215,6 +223,7 @@
                 font-size: 14px;
                 cursor: pointer;
                 width: 30%;
+
             }
 
             .create-account-button {
@@ -225,6 +234,7 @@
                 color: darkcyan;
                 margin-top: 10px;
                 background-color: white;
+                margin-top: -300px;
 
                 position: absolute; /* Position absolutely within the container */
                 left: 50%; /* Move to the horizontal center */
@@ -233,58 +243,55 @@
             }
 
 
-
-
         </style>
     </head>
     <body>
 
 
-     
-         <div class="navbar">
+        <div class="navbar">
             <a href="admindashboard.jsp">Go to Admin Dashboard</a>
-
-        </div>
-
 
         </div>
 
 
         <div class="custom-container">
             <div class="login-box">
-                Create a Job Seeker Account
+                Delete Consultant Account
             </div>
         </div>
 
-
-
-
+        <%
+            int id = Integer.parseInt(request.getParameter("id"));
+            ConsultantDao dao2 = new ConsultantDao(dbconnect.getConn());
+            Consultant d = dao2.getConsultantById(id);
+        %>
 
         <div class="container form-container">
             <h1 class="text-center"></h1>
-            <form id="registrationForm" action="CreateJobseekerServlet" method="post">
+            <form id="registrationForm" action="ConsultantDeleteServlet" method="post">
                 <div class="row">
                     <div class="col-md-6 form-group">
                         <label for="fname"><b>First Name</b></label>
-                        <input type="text" name="fname" class="form-control" id="fname" placeholder="Enter First Name">
+                        <input type="text" value="<%=d.getFname()%>" name="fname" class="form-control" id="fname" placeholder="Enter First Name">
                         <small id="fname_alert"></small>
                     </div>
                     <div class="col-md-6 form-group">
                         <label for="lname"><b>Last Name</b></label>
-                        <input type="text"  name="lname" class="form-control" id="lname" placeholder="Enter Last Name">
+                        <input type="text" value="<%=d.getLname()%>" name="lname" class="form-control" id="lname" placeholder="Enter Last Name">
                         <small id="lname_alert"></small>
                     </div>
                 </div>
 
+
                 <div class="row">
                     <div class="col-md-6 form-group">
                         <label for="email"><b>Email Address</b> </label>
-                        <input type="email"  name="email" class="form-control" id="email" placeholder="Enter Email Address">
+                        <input type="email" value="<%=d.getEmail()%>"  name="email" class="form-control" id="email" placeholder="Enter Email Address" readonly>
                         <small id="email_alert"></small>
                     </div>
                     <div class="col-md-6 form-group">
                         <label for="password"><b>Password</b> </label>
-                        <input type="password"  name="password" class="form-control" id="password" placeholder="Enter Password">
+                        <input type="password" value="<%=d.getPassword()%>"  name="password" class="form-control" id="password" placeholder="Enter Password">
                         <small id="password_alert"></small>
                     </div>
                 </div>
@@ -294,82 +301,94 @@
 
                     <div class="col-md-6 form-group">
                         <label for="phoneNumber"><b>Phone Number</b></label>
-                        <input type="text" name="phone" class="form-control" id="phoneNumber" placeholder="Enter Phone Number">
+                        <input type="text" value="<%=d.getPhoneNumber()%>" name="phone" class="form-control" id="phoneNumber" placeholder="Enter Phone Number">
                         <small id="phoneNumber_alert"></small>
                     </div>
-                </div>
-                <div class="col-md-6 form-group">
-
-                </div>
-
-
-
-                <div class="row">
-                    <div class="col-md-12 form-group">
-                      
+                    <div class="col-md-6 form-group">
+                        <label for="searchCountries"><b>Specialized Countries </b></label>
+                        <input type="text" value="<%=d.getSpecializedCountries()%>" name="specializedCountries" class="form-control" id="specializedCountries" placeholder="Search and Add Countries">
+                        <small id="specializedCountries_alert"></small>
+                        <div id="specializedCountries"></div>
                     </div>
                 </div>
-                <button type="submit" onclick="GetData();" class="btn-submit">Create</button>
 
-                <br><br>
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <label for="workingPeriod"><b>Working Period</b> </label>
+                        <input type class="form-control" value="<%=d.getWorkingPeriod()%>" name ="workingPeriod" id="workingPeriod" placeholder="Enter Working Period">
+                        <small id="workingPeriod_alert"></small>
+                    </div>
 
-                <script>
-                    function redirectToMultiUserLogin() {
-                        window.location.href = 'Home.jsp';
-                    }
-                </script>
+                </div>
                 <br>
+
+
+                </div>
+                <br>
+
+
+                <input type="hidden" name="id" value="<%=d.getId()%>">
+
+                <button type="submit" onclick="GetData();" class="btn-submit">Delete</button>
+                <br><br>
 
             </form>
         </div>
 
-    </form>
-</div>
-<script>
-    function validateForm() {
-        var email = document.getElementById("email").value;
-        var password = document.getElementById("password").value;
-        var privacyCheckbox = document.getElementById("privacyCheckbox").checked;
-        var isValid = true;
 
-        if (email === "") {
-            document.getElementById("email_alert").textContent = "Email is required.";
-            document.getElementById("email_alert").style.color = "red";
-            isValid = false;
-        } else {
-            document.getElementById("email_alert").textContent = "";
-        }
+        <script>
+            function validateForm() {
+                var email = document.getElementById("email").value;
+                var password = document.getElementById("password").value;
+                var privacyCheckbox = document.getElementById("privacyCheckbox").checked;
+                var isValid = true;
 
-        if (password === "") {
-            document.getElementById("password_alert").textContent = "Password is required.";
-            document.getElementById("password_alert").style.color = "red";
-            isValid = false;
-        } else {
-            document.getElementById("password_alert").textContent = "";
-        }
+                if (email === "") {
+                    document.getElementById("email_alert").textContent = "Email is required.";
+                    document.getElementById("email_alert").style.color = "red";
+                    isValid = false;
+                } else {
+                    document.getElementById("email_alert").textContent = "";
+                }
 
-    
+                if (password === "") {
+                    document.getElementById("password_alert").textContent = "Password is required.";
+                    document.getElementById("password_alert").style.color = "red";
+                    isValid = false;
+                } else {
+                    document.getElementById("password_alert").textContent = "";
+                }
 
-    function GetData() {
-            console.log("Button clicked!"); // Add this line
+                if (!privacyCheckbox) {
+                    document.getElementById("privacy_alert").textContent = "You must agree to the Privacy Policy.";
+                    isValid = false;
+                } else {
+                    document.getElementById("privacy_alert").textContent = "";
+                }
 
-        if (validateForm()) {
-            // Proceed with registration
-            // You can add your registration logic here
-
-            var successMessage = "Job Seeker details saved successfully.";
-            var errorMessage = "Failed to save Job Seeker details.";
-            var isSuccess = true;
-
-            if (isSuccess) {
-                alert(successMessage);
-            } else {
-                alert(errorMessage);
+                return isValid;
             }
-        }
-    }
-</script>
+
+            function GetData() {
+                console.log("Button clicked!"); // Add this line
+
+                if (validateForm()) {
+                    // Proceed with registration
+                    // You can add your registration logic here
+
+                    var successMessage = "Consultant details Deleted successfully.";
+                    var errorMessage = "Failed to delete Consultant details.";
+                    var isSuccess = true;
+
+                    if (isSuccess) {
+                        alert(successMessage);
+                    } else {
+                        alert(errorMessage);
+                    }
+                }
+            }
+        </script>
 
 
-</body>
+    </body>
 </html>

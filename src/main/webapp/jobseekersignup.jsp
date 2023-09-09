@@ -242,8 +242,8 @@
 
         <div class="navbar">
             <a href="home.jsp">Home</a>
-            <a href="">About Us</a>
-            <button type="button" onclick="window.location.href = 'multiuserlogin.jsp' style ="width:auto;">Register/SignIn</button>
+            <a href="home.jsp">About Us</a>
+           <button onclick="redirectToMultiUserLogin()" style="width:auto;">Register/SignIn</button>
 
             <script>
                 function redirectToMultiUserLogin() {
@@ -323,7 +323,7 @@
 
                 <script>
                     function redirectToMultiUserLogin() {
-                        window.location.href = 'Home.jsp';
+                        window.location.href = 'multiuserlogin.jsp';
                     }
                 </script>
                 <br>

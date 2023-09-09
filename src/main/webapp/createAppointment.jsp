@@ -4,6 +4,12 @@
     Author     : Jude Shalon
 --%>
 
+<%@page import="com.entity.Jobseeker"%>
+<%@page import="com.dao.JobSeekerDao"%>
+<%@page import="java.util.List"%>
+<%@page import="com.entity.Consultant"%>
+<%@page import="com.dao.ConsultantDao"%>
+<%@page import="com.db.dbconnect"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" 
          pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -11,9 +17,18 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>MultiUserLogin | Consultant Create Page</title>
+        <title>MultiUserLogin | Appointment Create Page</title>
         <link rel="stylesheet" 
               href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <!-- Include Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+        <!-- Include jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <!-- Include Bootstrap JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.2/dist/js/bootstrap.min.js"></script>
+
         <style>
             /* -------------- NAV BAR STYLE ---------------- */
 
@@ -167,7 +182,7 @@
             }
             .btn-submit {
                 background-color: lightseagreen;
-                margin-top: -350px;
+                margin-top: 150px;
 
             }
             .search-countries {
@@ -230,8 +245,49 @@
                 left: 50%; /* Move to the horizontal center */
                 transform: translateX(-50%); /* Adjust to center the button */
 
+                .dropdown {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh; /* Adjust the height as needed */
+                }
+
+                /* Optional styling for the select element */
+                #dropdown {
+                    width: 200px; /* Set the width as needed */
+                }
+
             }
+
+            table {
+                width: 100%;
+                border-collapse: separate;
+                border-spacing: 10px; /* Adjust the spacing as needed */
+            }
+
+            /* Style for table cells (td) */
+            td {
+                padding: 10px; /* Adjust the padding as needed */
+            }
+
+            /* Default style for the dropdown */
+            #consultantDropdown {
+                background-color: white; /* Default background color */
+                color: black; /* Default text color */
+            }
+
+            /* Style for "Conform" option */
+            #consultantDropdown option[value="conform"] {
+                color: green; /* White text color for "Conform" */
+            }
+
+            /* Style for "Pending" option */
+            #consultantDropdown option[value="pending"] {
+                color: darkorange; /* White text color for "Pending" */
+            }
+
         </style>
+
     </head>
     <body>
 
@@ -244,159 +300,123 @@
 
         <div class="custom-container">
             <div class="login-box">
-                Create a Consultant Account
+                Create a Appointment Account
             </div>
         </div>
 
+
         <div class="container form-container">
             <h1 class="text-center"></h1>
-            <form id="createConsultant" action="CreateConsultantServlet" method="post" onsubmit="return validation();">
-                <div class="row">
-                    <div class="col-md-6 form-group">
-                        <label for="fname"><b>First Name</b></label>
-                        <input type="text" name="fname" class="form-control" 
-                               id="fname" placeholder="Enter First Name">
-                        <small id="fname_alert"></small>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label for="lname"><b>Last Name</b></label>
-                        <input type="text"  name="lname" class="form-control" 
-                               id="lname" placeholder="Enter Last Name">
-                        <small id="lname_alert"></small>
-                    </div>
-                </div>
+            <form id="createAppointment" action="CreateAppointmentServlet" method="post" >
+                <table border="0" align="center">
+                    <!-- First Row -->
+                    <tr>
+                        <td>
+                            <label for="fname"><b>Consultants</b></label>
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                                <select id="consultant_id" name="consultant_id">
+                                    <option>Select Consultant</option>
+                                    <%
+                                        ConsultantDao dao2 = new ConsultantDao(dbconnect.getConn());
+                                        List<Consultant> list2 = dao2.getAllConsultant();
+                                        for (Consultant d : list2) {
+                                    %>
+
+                                    <option value="<%=d.getId()%>"><%=d.getId()%>  &nbsp; <%=d.getFname()%> <%=d.getLname()%></option>
+                                    <%
+                                            log(d.getFname());
+                                        }
+                                    %>
+                                </select>
+                            </div>
 
 
-                <div class="row">
-                    <div class="col-md-6 form-group">
-                        <label for="email"><b>Email Address</b> </label>
-                        <input type="email"  name="email" class="form-control" 
-                               id="email" placeholder="Enter Email Address">
-                        <small id="email_alert"></small>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label for="password"><b>Password</b> </label>
-                        <input type="password"  name="password" class="form-control" 
-                               id="password" placeholder="Enter Password">
-                        <small id="password_alert"></small>
-                    </div>
-                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <label for="lname"><b>Job Seekers</b></label>
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                                <select id="jobseeker_id" name="jobseeker_id">
 
-                <div class="row">
+                                    <option>Select Job Seeker</option>                                    
+                                    <%
+                                        JobSeekerDao dao3 = new JobSeekerDao(dbconnect.getConn());
+                                        List<Jobseeker> jobseekers = dao3.getAllJobseekers();
+                                        for (Jobseeker jobseeker : jobseekers) {
+                                    %>
 
 
-                    <div class="col-md-6 form-group">
-                        <label for="phoneNumber"><b>Phone Number</b></label>
-                        <input type="text" name="phone" class="form-control" 
-                               id="phoneNumber" placeholder="Enter Phone Number">
-                        <small id="phoneNumber_alert"></small>
-                    </div>
-                    <div class="col-md-6 form-group">
-                        <label for="searchCountries"><b>Specialized Countries 
-                            </b></label>
-                        <input type="text" name="specializedCountries" 
-                               class="form-control" 
-                               id="specializedCountries" 
-                               placeholder="Search and Add Countries">
-                        <small id="specializedCountries_alert"></small>
-                        <div id="specializedCountries"></div>
-                    </div>
-                </div>
+                                    <option value="<%=jobseeker.getId()%>"><%= jobseeker.getId()%>  &nbsp; <%=jobseeker.getFname()%> <%=jobseeker.getLname()%></option>
+                                    <%
+                                        }
+                                    %>
+                                </select>
+                            </div>
 
-                <div class="row">
-                    <div class="col-md-6 form-group">
-                        <label for="workingPeriod"><b>Working Period</b> </label>
-                        <textarea class="form-control" name ="workingPeriod" 
-                                  id="workingPeriod" placeholder="Enter Working Period"></textarea>
-                        <small id="workingPeriod_alert"></small>
-                    </div>
-
-                </div>
-                <div class="row" style="margin-top: 400px">
-                    <button type="submit" class="btn-submit">Create</button>
-
-                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Second Row -->
+                    <tr>
+                        <td>
+                            <label for="appointment_date"><b>Appointment Date</b></label>
+                        </td>
+                        <td>
+                            <input type="date" name="appointment_date" class="form-control" id="appointmentDate" placeholder="Select Appointment Date">
+                            <small id="appointmentDate_alert"></small>
+                        </td>
+                        <td>
+                            <label for=">appointmentTime"><b>Appointment Time</b></label>
+                        </td>
+                        <td>
+                            <input type="time" name="appointment_time" class="form-control" id="appointmentTime" placeholder="Select Appointment Time">
+                            <small id="appointmentTime_alert"></small>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button type="submit" class="btn-submit">Create</button>
+                        </td>
+                    </tr>
+                </table>
 
             </form>
+            <br><br>
+            <br>
+
+
+            <br><br>
         </div>
 
 
         <script>
-            function validation() {
-                var email = document.getElementById("email").value;
-                var password = document.getElementById("password").value;
-                var fname = document.getElementById("fname").value;
-                var lname = document.getElementById("lname").value;
-                var phoneNumber = document.getElementById("phoneNumber").value;
+            function showFormData(event) {
+                event.preventDefault(); // Prevent the form from actually submitting
 
-                if (fname === "") {
-                    document.getElementById("fname_alert").textContent
-                            = "First name is required.";
-                    document.getElementById("fname_alert").style.color = "red";
-                    return false;
-                } else {
-                    document.getElementById("fname_alert").textContent = "";
+                // Get the form element
+                var form = document.getElementById("createAppointment");
+
+                // Create a new FormData object to capture form data
+                var formData = new FormData(form);
+
+                // Prepare the data for display
+                var formDataText = "Form Data:\n";
+                for (var pair of formData.entries()) {
+                    formDataText += pair[0] + ": " + pair[1] + "\n";
                 }
 
-                if (lname === "") {
-                    document.getElementById("lname_alert").textContent
-                            = "Last Name is required.";
-                    document.getElementById("lname_alert").style.color = "red";
-                    return false;
-                } else {
-                    document.getElementById("lname_alert").textContent = "";
-                }
+                // Display the form data on the page
+                var formDataDisplay = document.getElementById("formData");
 
-                if (email === "") {
-                    document.getElementById("email_alert").textContent = "Email is required.";
-                    document.getElementById("email_alert").style.color = "red";
-                    return false;
-                } else {
-                    document.getElementById("email_alert").textContent = "";
-                }
-
-                if (password === "") {
-                    document.getElementById("password_alert").textContent
-                            = "Password is required.";
-                    document.getElementById("password_alert").style.color = "red";
-                    return false;
-                } else {
-                    document.getElementById("password_alert").textContent = "";
-                }
-
-                if (phoneNumber === "") {
-                    document.getElementById("phoneNumber_alert").textContent
-                            = "Phone number is required.";
-                    document.getElementById("phoneNumber_alert").style.color = "red";
-                    return false;
-                } else {
-                    document.getElementById("phoneNumber_alert").textContent = "";
-                }
-
-                return true;
-            }
-
-            function validateForm() {
-                console.log("Button clicked!"); // Add this line
-
-                if (validateForm()) {
-                    // Proceed with registration
-                    // You can add your registration logic here
-                    if (validation()) {
-                        // If validation is successful, submit the form
-                        document.getElementById("createConsultant").submit();
-                    }
-//                    var successMessage = "Consultant details saved successfully.";
-//                    var errorMessage = "Failed to save onsultant details.";
-//                    var isSuccess = true;
-//                    if (isSuccess) {
-//                        alert(successMessage);
-//                    } else {
-//                        alert(errorMessage);
-//                    }
-                }
+                console.log(formDataDisplay)
+                alert(formDataDisplay);
             }
         </script>
+
 
 
     </body>

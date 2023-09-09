@@ -134,6 +134,37 @@ public class ConsultantDao {
         return d;
     }
     
+       public Consultant getConsultantByEmail(String email) {
+
+        Consultant d = null;
+        try {
+
+            String sql = "select * from consultant_dtls where email=?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1,email);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                d = new Consultant();
+                d.setId(rs.getInt(1));
+                d.setFname(rs.getString(2));
+                d.setLname(rs.getString(3));
+                d.setEmail(rs.getString(4));
+                d.setPassword(rs.getString(5));
+                d.setPhoneNumber(rs.getString(6));
+                d.setSpecializedCountries(rs.getString(7));
+                d.setWorkingPeriod(rs.getString(8));
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return d;
+    }
+    
+    
+    
    public boolean updateConsultant(Consultant consultant) {
     boolean f = false;
 
@@ -155,6 +186,29 @@ public class ConsultantDao {
 
             if (i == 1) {
                 f = true;
+            }
+        }
+    } catch (SQLException e) {
+        // Handle the exception gracefully, either by throwing a custom 
+        // exception or logging the error.
+        e.printStackTrace();
+    }
+
+    return f;
+}
+
+public boolean deleteConsultantById(int id) {
+    boolean f = false;
+
+    try {
+        String sql = "DELETE FROM consultant_dtls WHERE id=?";
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, id);
+
+            int i = ps.executeUpdate();
+
+            if (i == 1) {
+                f = true; // Set to true if one row is affected, indicating successful deletion
             }
         }
     } catch (SQLException e) {

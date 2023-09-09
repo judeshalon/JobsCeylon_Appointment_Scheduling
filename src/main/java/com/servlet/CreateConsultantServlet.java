@@ -1,7 +1,11 @@
 package com.servlet;
 
+import com.dao.ConsultantDao;
+import com.db.dbconnect;
+import com.entity.Consultant;
 import java.io.IOException;
-
+import java.sql.Connection;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,59 +13,44 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import com.dao.ConsultantDao;
-import com.db.dbconnect;
-import com.entity.Consultant;
-
 @WebServlet("/CreateConsultantServlet")
 public class CreateConsultantServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(CreateAppointmentServlet.class.getName());
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) 
-            throws ServletException, IOException {
-
-        try {  
-            System.out.println(1);
-            String fname = req.getParameter("fname");
-            String lname = req.getParameter("lname");
-            String email = req.getParameter("email");
-            String password = req.getParameter("password");
-            String phoneNumber = req.getParameter("phoneNumber");
-            String specializedCountries = req.getParameter(
-                    "SpecializedCountries");
-            String workingPeriod = req.getParameter("workingPeriod");
+    protected void doPost(HttpServletRequest request,
             
-            Consultant consultant = new Consultant(fname,lname,email,password,
-            phoneNumber,specializedCountries,workingPeriod);         
-          
+            HttpServletResponse response) throws ServletException, IOException {
+        try{
             
-            ConsultantDao dao = new ConsultantDao(dbconnect.getConn());
-            
-            HttpSession session = req.getSession();
-            try {
-                boolean isCreated = dao.registerConsultant(consultant);
+        String firstName = request.getParameter("fname");
+        if(firstName == "" ) throw new NullPointerException("First Name Cannot be empty");
+        String lastName = request.getParameter("lname");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String phoneNumber = request.getParameter("phone");
+        String SpecializedCountries = request.getParameter(
+                "specializedCountries");
+        String workingPeriod = request.getParameter("workingPeriod");
+HttpSession session = request.getSession();
+                Consultant c = new Consultant(firstName, lastName, 
+                        email, password, phoneNumber, SpecializedCountries, 
+                        workingPeriod);
+		ConsultantDao dao = new ConsultantDao(dbconnect.getConn());
+                			boolean f = dao.registerConsultant(
+                                                c);
+		if (f) {
+			session.setAttribute("sucMsg", 
+                                "Register Sucessfully");
+				response.sendRedirect("admindashboard.jsp");
+		} else {
+			session.setAttribute("errorMsg", 
+                                "invalid email & password");
+			response.sendRedirect("createConsultant.jsp");
+		}
+    }catch (Exception e) {
+			e.printStackTrace();
+		}
 
-                if (isCreated) {
-                    session.setAttribute("succMsg", 
-                            "Consultant Created sucessfully");
-                    resp.sendRedirect("admindashboard.jsp");
-                } else {
-                    session.setAttribute("errorMsg", 
-                            "Something wrong on server");
-                    resp.sendRedirect("editconsultant.jsp");
-                }
-            } catch (Exception e) {
-                // Print the exception details for debugging
-                e.printStackTrace();
-                // You can also set an error message for 
-                // the user or take appropriate action
-                session.setAttribute("errorMsg", 
-                        "An error occurred while updating the consultant");
-                resp.sendRedirect("editconsultant.jsp");
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }
