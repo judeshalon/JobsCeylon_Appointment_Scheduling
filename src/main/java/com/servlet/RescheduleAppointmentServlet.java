@@ -23,13 +23,20 @@ public class RescheduleAppointmentServlet extends HttpServlet {
             AppointmentDao dao = new AppointmentDao(dbconnect.getConn()); 
             Appointment appointment = dao.getAppointmentById(id);
 
-            int consultantId = Integer.parseInt(req.getParameter("consultant_id")); // Change parameter name here
-            int jobseekerId = Integer.parseInt(req.getParameter("jobseeker_id")); // Change parameter name here
-            String newDatetime = req.getParameter("appointment_datetime"); // Change parameter name here
+            int consultantId = Integer.parseInt(req.getParameter("consultant_id"));
+            int jobseekerId = Integer.parseInt(req.getParameter("jobseeker_id"));
+            String newDatetime = req.getParameter("appointment_datetime");
 
-            if (consultantId != 0) appointment.setConsultant_id(consultantId);
-            if (jobseekerId != 0) appointment.setJobseeker_id(jobseekerId);
-            if (newDatetime != null) appointment.setAppointment_datetime(newDatetime);
+            if (consultantId != 0) {
+                appointment.setConsultant_id(consultantId);
+            }
+            if (jobseekerId != 0) {
+                appointment.setJobseeker_id(jobseekerId);
+            }
+            if (newDatetime != null) {
+                // Make sure newDatetime is not empty
+                appointment.setAppointment_datetime(newDatetime);
+            }
 
             HttpSession session = req.getSession();
             try {
