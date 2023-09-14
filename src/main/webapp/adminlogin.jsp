@@ -123,112 +123,109 @@
                 width: 90%;
                 font-family:"poppins";
             }
-            
+
             /* Style for the dialog box */
-        #dialog {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 15px;
-            border-radius: 5px;
-            font-weight: bold;
-            text-align: center;
-            width: 300px;
-        }
-        .success {
-            background-color: #28a745; /* Green background color for success message */
-            color: white;
-        }
-        .error {
-            background-color: red; /* Red background color for error message */
-            color: white;
-        }
-        #dialog {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            padding: 15px;
-            border-radius: 5px;
-            font-weight: bold;
-            text-align: center;
-            width: 300px;
-        }
-        .success {
-            background-color: #28a745; /* Green background color for success message */
-            color: white;
-        }
-        .error {
-            background-color: red; /* Red background color for error message */
-            color: white;
-        }
-    </style>
-
-    <script>
-        function showMessage(message, isError) {
-            var dialog = document.getElementById("dialog");
-            dialog.innerHTML = message;
-            dialog.className = isError ? "error" : "success";
-            dialog.style.display = "block";
-        }
-
-        function hideMessage() {
-            var dialog = document.getElementById("dialog");
-            dialog.style.display = "none";
-        }
-
-        function handleLogin() {
-            // Replace this with your actual validation logic.
-            // For demonstration purposes, we're assuming the login always fails here.
-            var loginSuccessful = false; // Replace with your actual logic.
-
-            if (loginSuccessful) {
-                showMessage("Successfully logged in as admin", false); // Success message
-                return true; // Proceed with form submission
-            } else {
-                showMessage("Login failed. Please check your credentials.", true); // Error message
-                return false; // Prevent form submission
+            #dialog {
+                display: none;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                padding: 15px;
+                border-radius: 5px;
+                font-weight: bold;
+                text-align: center;
+                width: 300px;
             }
-        }
-    </script>
-
+            .success {
+                background-color: #28a745; /* Green background color for success message */
+                color: white;
+            }
+            .error {
+                background-color: red; /* Red background color for error message */
+                color: white;
+            }
+            #dialog {
+                display: none;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                padding: 15px;
+                border-radius: 5px;
+                font-weight: bold;
+                text-align: center;
+                width: 300px;
+            }
+            .success {
+                background-color: #28a745; /* Green background color for success message */
+                color: white;
+            }
+            .error {
+                background-color: red; /* Red background color for error message */
+                color: white;
+            }
         </style>
+
+        <script>
+            function showMessage(message, isError) {
+                var dialog = document.getElementById("dialog");
+                dialog.innerHTML = message;
+                dialog.className = isError ? "error" : "success";
+                dialog.style.display = "block";
+            }
+
+            function hideMessage() {
+                var dialog = document.getElementById("dialog");
+                dialog.style.display = "none";
+            }
+
+            function handleLogin() {
+                // Replace this with your actual validation logic.
+                // For demonstration purposes, we're assuming the login always fails here.
+                var email = document.getElementById("email").value;
+                var password = document.getElementById("password").value;
+                var expectedEmail = "admin@gmail.com";
+                var expectedPassword = "1234";
+
+                if (email === expectedEmail && password === expectedPassword) {
+                    showMessage("Successfully logged in as admin", false); // Success message
+
+                    setTimeout(redirectToNextPage, 2000); // Redirect after 2 seconds (2000 milliseconds)
+                    return true; // Proceed with form submission
+                } else {
+                    showMessage("Login failed. Please check your credentials.", true); // Error message
+                    return false; // Prevent form submission
+                }
+            }
+        </script>
     </head>
     <body>
         <div class="custom-container">
             <div class="login-box">
-                Please login as Admin          
+                Please login as Admin
             </div>
         </div>
 
-   
+        <div class="MultiUser-Login">
+            <div class="form-container">
+                <form action="Adminservlet" method="post" onsubmit="return handleLogin();">
+                    <div class="form-group">
+                        <label class="form-label" for="email">E-mail:</label>
+                        <input class="form-input" type="email" id="email" name="email" required>
+                    </div>
 
-    <div class="MultiUser-Login">
-        <div class="form-container">
-            <form action="Adminservlet" method="post">
-                <div class="form-group">
-                    <label class="form-label" for="email">E-mail:</label>
-                    <input class="form-input" type="email" id="email" name="email" required>
-                </div>
+                    <div class="form-group">
+                        <label class="form-label" for="password">Password:</label>
+                        <input class="form-input" type="password" id="password" name="password" required>
+                    </div>
 
-                <div class="form-group">
-                    <label class="form-label" for="password">Password:</label>
-                    <input class="form-input" type="password" id="password" name="password" required>
-                </div>
-
-                <button class="form-button" type="submit">Login</button><br>
-                <a class="form-link-button" href="multiuserlogin.jsp">Back </a>
-
-            </form>
+                    <button class="form-button" type="submit">Login</button><br>
+                    <a class="form-link-button" href="multiuserlogin.jsp">Back </a>
+                </form>
+            </div>
         </div>
-    </div>
 
-
-
-
-</body>
+        <div id="dialog" style="display: none;"></div>
+    </body>
 </html>
-

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 
 public class AppointmentDao {
 
@@ -90,31 +91,32 @@ public class AppointmentDao {
     }
 
     public boolean updateAppointment(Appointment appointment) {
-        boolean f = false;
+        boolean isUpdated = false;
 
         try {
-            String sql = "update appointment_dtls set consultant_id=?,jobseeker_id=?,appointment_datetime=?,"
-                    + " where id=?";
+            String sql = "UPDATE appointment_dtls SET consultant_id=?, jobseeker_id=?, appointment_datetime=? WHERE id=?";
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setInt(1, appointment.getConsultant_id());
                 ps.setInt(2, appointment.getJobseeker_id());
-                ps.setString(3, appointment.getAppointment_datetime());
 
-                ps.setInt(8, appointment.getId());
+                // Convert the appointment datetime String to a java.sql.Timestamp
+                Timestamp appointmentTimestamp = Timestamp.valueOf(appointment.getAppointment_datetime());
+                ps.setTimestamp(3, appointmentTimestamp);
 
-                int i = ps.executeUpdate();
+                ps.setInt(4, appointment.getId());
 
-                if (i == 1) {
-                    f = true;
+                int rowsAffected = ps.executeUpdate();
+
+                if (rowsAffected == 1) {
+                    isUpdated = true;
                 }
             }
         } catch (SQLException e) {
-            // Handle the exception gracefully, either by throwing a custom 
-            // exception or logging the error.
+            // Handle the exception gracefully, either by throwing a custom exception or logging the error.
             e.printStackTrace();
         }
 
-        return f;
+        return isUpdated;
     }
 
     public boolean deleteAppointmentById(int id) {
@@ -165,8 +167,8 @@ public class AppointmentDao {
         }
         return list;
     }
-    
-     public List<Appointment> getAppointmentByJobseekerId(int jobseeker_id) {
+
+    public List<Appointment> getAppointmentByJobseekerId(int jobseeker_id) {
 
         List<Appointment> list = new ArrayList<Appointment>();
         Appointment d = null;

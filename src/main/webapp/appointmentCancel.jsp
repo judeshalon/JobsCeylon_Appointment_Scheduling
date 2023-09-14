@@ -3,27 +3,37 @@
     Created on : 10-Aug-2023, 18:28:53
     Author     : Jude Shalon
 --%>
-<%@page import="java.util.List"%>
+
+<%@page import="java.util.Iterator"%>
+<%@page import="com.entity.Appointment"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.Date"%>
-<%@page import="java.util.Iterator"%>
-
-<%@page import="com.db.dbconnect"%>
-<%@page import="com.entity.Appointment"%>
 <%@page import="com.dao.AppointmentDao"%>
 <%@page import="com.entity.Jobseeker"%>
 <%@page import="com.dao.JobSeekerDao"%>
+<%@page import="java.util.List"%>
 <%@page import="com.entity.Consultant"%>
 <%@page import="com.dao.ConsultantDao"%>
-
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@page import="com.db.dbconnect"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" 
+         pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Admin DashBoard | Delete Appointment</title>
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <title>Admin DashBoard | Appointment Cancel Page</title>
+        <link rel="stylesheet" 
+              href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <!-- Include Bootstrap CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+        <!-- Include jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+        <!-- Include Bootstrap JavaScript -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.5.2/dist/js/bootstrap.min.js"></script>
+
         <style>
             /* -------------- NAV BAR STYLE ---------------- */
 
@@ -57,18 +67,12 @@
                 color: black;
             }
 
-
-
             .login-button:hover {
                 background-color: #b62d23;
             }
 
-
-
             /* Set a style for all buttons */
             button {
-
-
                 float: right;
                 background-color: #b62d23;
                 color: white;
@@ -133,6 +137,7 @@
                 box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
                 padding: 40px;
                 box-sizing: border-box;
+                margin-top: 40px;
                 height: 800px; /* Set the height to 1000px */
 
             }
@@ -160,6 +165,8 @@
                 margin-right: 5px;
             }
             .btn-submit {
+
+
                 background-color: seagreen;
                 color: white;
                 border: none;
@@ -172,11 +179,17 @@
                 position: absolute; /* Position absolutely within the container */
                 left: 50%; /* Move to the horizontal center */
                 transform: translateX(-50%); /* Adjust to center the button */
+
                 button:hover {
                     opacity: 0.8;
                 }
-            }
 
+            }
+            .btn-submit {
+                background-color: lightseagreen;
+                margin-top: 150px;
+
+            }
             .search-countries {
                 width: 100%;
                 padding: 10px;
@@ -200,7 +213,7 @@
                 width: 30%;
                 margin:0 auto;
                 margin: 10px auto; /* Center the button horizontally */
-                display: block; /* Make the button a block element for margin auto to work */
+                display: block; /* Make button a block element for margin auto to work */
                 cursor: pointer;
                 margin-top: -350px;
 
@@ -209,8 +222,6 @@
                 transform: translateX(-50%); /* Adjust to center the button */
 
             }
-
-
             .create-account-button
             {
 
@@ -239,28 +250,51 @@
                 left: 50%; /* Move to the horizontal center */
                 transform: translateX(-50%); /* Adjust to center the button */
 
+                .dropdown {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100vh; /* Adjust the height as needed */
+                }
+
+                /* Optional styling for the select element */
+                #dropdown {
+                    width: 200px; /* Set the width as needed */
+                }
+
             }
 
-            .form-container{
-                margin: auto;
-                width:70%
-            }
-
-            .field-container{
-                margin-top: 20px;
-            }
-
-            .select-style{
-                padding: 8px;
+            table {
                 width: 100%;
-
+                border-collapse: separate;
+                border-spacing: 10px; /* Adjust the spacing as needed */
             }
 
+            /* Style for table cells (td) */
+            td {
+                padding: 10px; /* Adjust the padding as needed */
+            }
+
+            /* Default style for the dropdown */
+            #consultantDropdown {
+                background-color: white; /* Default background color */
+                color: black; /* Default text color */
+            }
+
+            /* Style for "Conform" option */
+            #consultantDropdown option[value="conform"] {
+                color: green; /* White text color for "Conform" */
+            }
+
+            /* Style for "Pending" option */
+            #consultantDropdown option[value="pending"] {
+                color: darkorange; /* White text color for "Pending" */
+            }
 
         </style>
+
     </head>
     <body>
-
 
         <div class="navbar">
             <a href="admindashboard.jsp">Go to Admin Dashboard</a>
@@ -268,14 +302,18 @@
         </div>
 
 
+
         <div class="custom-container">
             <div class="login-box">
-                Delete Appointment Account
+                Cancel a Appointment Account
             </div>
         </div>
 
         <%
-            int id = Integer.parseInt(request.getParameter("id"));
+            int id = 0;
+            if (request.getParameter("id") != null) {
+                id = Integer.parseInt(request.getParameter("id"));
+            }
             AppointmentDao appointmentDao = new AppointmentDao(dbconnect.getConn());
             Appointment appointment = appointmentDao.getAppointmentById(id);
 
@@ -291,124 +329,156 @@
             String formattedTime = outputFormat.format(date);
 
         %>
-        <div class="form-container" action="DeleteAppointmentServlet" method="post">
-            <form class="row g-3 ">
-                <div class="col-md-6 field-container">
-                    <label class="form-label">Consultant</label>
-                    <div class="dropdown">
-                        <select id="consultant_id" name="consultant_id" class="form-select select-style">
-                            <%                            ConsultantDao consultantDao = new ConsultantDao(dbconnect.getConn());
-                                List<Consultant> consultants = consultantDao.getAllConsultant();
-                                Consultant selectedConsultant = null;
 
-                                String selectedConsultantId = Integer.toString(appointment.getConsultant_id());
-                                for (Consultant consultant : consultants) {
-                                    String consultantId = Integer.toString(consultant.getId());
+        <div class="container form-container">
+            <h1 class="text-center"></h1>
+            <form id="createAppointment" action="DeleteAppointmentServlet" method="post" >
+                <table border="0" align="center">
+                    <!-- First Row -->
+                    <tr>
+                        <td>
+                            <label for="fname"><b>Consultants</b></label>
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                                <select id="consultant_id" name="consultant_id" class="form-select select-style">
+                                    <%  ConsultantDao consultantDao = new ConsultantDao(dbconnect.getConn());
+                                        List<Consultant> consultants = consultantDao.getAllConsultant();
+                                        Consultant selectedConsultant = null;
 
-                                    if (consultantId.equals(selectedConsultantId)) { // Use 'equals' to compare strings
-                                        selectedConsultant = consultant;
-                                        break;
-                                    }
-                                }
+                                        String selectedConsultantId = Integer.toString(appointment.getConsultant_id());
+                                        for (Consultant consultant : consultants) {
+                                            String consultantId = Integer.toString(consultant.getId());
 
-                                Iterator<Consultant> iterator = consultants.iterator();
+                                            if (consultantId.equals(selectedConsultantId)) { // Use 'equals' to compare strings
+                                                selectedConsultant = consultant;
+                                                break;
+                                            }
+                                        }
 
-                                while (iterator.hasNext()) {
-                                    Consultant consultant = iterator.next();
+                                        Iterator<Consultant> iterator = consultants.iterator();
 
-                                    if (consultant.getId() == selectedConsultant.getId()) {
-                                        iterator.remove();
-                                        break;
-                                    }
-                                }
-                            %>
-                            <option value="<%=selectedConsultant.getId()%>"><%= selectedConsultant.getId()%>  &nbsp; <%=selectedConsultant.getFname()%> <%=selectedConsultant.getLname()%></option>
-                            <%
-                                for (Consultant consultant : consultants) {
-                            %>
-                            <option value="<%=consultant.getId()%>"><%= consultant.getId()%>  &nbsp; <%=consultant.getFname()%> <%=consultant.getLname()%></option>
-                            <%
-                                }
-                            %>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-6 field-container">
-                    <label class="form-label">Job Seeker</label>
-                    <div class="dropdown">
-                        <select id="jobseeker_id" name="jobseeker_id" class="form-select select-style">
-                            <%
-                                JobSeekerDao jobseekerDao = new JobSeekerDao(dbconnect.getConn());
-                                List<Jobseeker> jobseekers = jobseekerDao.getAllJobseekers();
-                                Jobseeker selectedJobseeker = null;
+                                        while (iterator.hasNext()) {
+                                            Consultant consultant = iterator.next();
 
-                                String selectedJobseekerId = Integer.toString(appointment.getJobseeker_id());
-                                for (Jobseeker jobseeker : jobseekers) {
-                                    String jobseekerId = Integer.toString(jobseeker.getId());
+                                            if (consultant.getId() == selectedConsultant.getId()) {
+                                                iterator.remove();
+                                                break;
+                                            }
+                                        }
+                                    %>
+                                    <option value="<%=selectedConsultant.getId()%>"><%= selectedConsultant.getId()%>  &nbsp; <%=selectedConsultant.getFname()%> <%=selectedConsultant.getLname()%></option>
+                                    <%
+                                        for (Consultant consultant : consultants) {
+                                    %>
+                                    <option value="<%=consultant.getId()%>"><%= consultant.getId()%>  &nbsp; <%=consultant.getFname()%> <%=consultant.getLname()%></option>
+                                    <%
+                                        }
+                                    %>
+                                </select>
+                            </div>
 
-                                    if (jobseekerId.equals(selectedJobseekerId)) { // Use 'equals' to compare strings
-                                        selectedJobseeker = jobseeker;
-                                        break;
-                                    }
-                                }
-                                Iterator<Jobseeker> jobseekeriterator = jobseekers.iterator();
 
-                                while (jobseekeriterator.hasNext()) {
-                                    Jobseeker jobseeker = jobseekeriterator.next();
+                            </div>
+                        </td>
+                        <td>
+                            <label for="lname"><b>Job Seekers</b></label>
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                                <select id="jobseeker_id" name="jobseeker_id" class="form-select select-style">
 
-                                    if (jobseeker.getId() == selectedJobseeker.getId()) {
-                                        jobseekeriterator.remove();
-                                        break;
-                                    }
-                                }
-                            %>
-                            <option value="<%=selectedJobseeker.getId()%>"><%= selectedJobseeker.getId()%>  &nbsp; <%=selectedJobseeker.getFname()%> <%=selectedJobseeker.getLname()%></option>
-                            <%
-                                for (Jobseeker jobseeker : jobseekers) {
-                            %>
-                            <option value="<%=jobseeker.getId()%>"><%= jobseeker.getId()%>  &nbsp; <%=jobseeker.getFname()%> <%=jobseeker.getLname()%></option>
-                            <%
-                                }
-                            %>                
-                        </select>
-                    </div>
-                </div>
-                <div class="col-6 field-container">
-                    <label class="form-label">Appointment Date</label>
-                    <input type="date" value="<%=appointmentDate%>"  name="appointment_date" class="form-control" id="appointmentDate" placeholder="Select Appointment Date">
-                </div>
-                <div class="col-6 field-container">
-                    <label class="form-label">Appointment Time</label>
-                    <input type="time" value="<%=appointmentTime%>"  name="appointment_time" class="form-control" id="appointmentTime" placeholder="Select Appointment Time">
-                </div>
-                <div class="col-12 field-container">
-                    <button type="submit" class="btn  btn-primary">Delete</button>
-                </div>
+                                    <%
+                                        JobSeekerDao jobseekerDao = new JobSeekerDao(dbconnect.getConn());
+                                        List<Jobseeker> jobseekers = jobseekerDao.getAllJobseekers();
+                                        Jobseeker selectedJobseeker = null;
+
+                                        String selectedJobseekerId = Integer.toString(appointment.getJobseeker_id());
+                                        for (Jobseeker jobseeker : jobseekers) {
+                                            String jobseekerId = Integer.toString(jobseeker.getId());
+
+                                            if (jobseekerId.equals(selectedJobseekerId)) { // Use 'equals' to compare strings
+                                                selectedJobseeker = jobseeker;
+                                                break;
+                                            }
+                                        }
+                                        Iterator<Jobseeker> jobseekeriterator = jobseekers.iterator();
+
+                                        while (jobseekeriterator.hasNext()) {
+                                            Jobseeker jobseeker = jobseekeriterator.next();
+
+                                            if (jobseeker.getId() == selectedJobseeker.getId()) {
+                                                jobseekeriterator.remove();
+                                                break;
+                                            }
+                                        }
+                                    %>
+                                    <option value="<%=selectedJobseeker.getId()%>"><%= selectedJobseeker.getId()%>  &nbsp; <%=selectedJobseeker.getFname()%> <%=selectedJobseeker.getLname()%></option>
+                                    <%
+                                        for (Jobseeker jobseeker : jobseekers) {
+                                    %>
+                                    <option value="<%=jobseeker.getId()%>"><%= jobseeker.getId()%>  &nbsp; <%=jobseeker.getFname()%> <%=jobseeker.getLname()%></option>
+                                    <%
+                                        }
+                                    %> 
+                                </select>
+                            </div>
+
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Second Row -->
+                    <tr>
+                        <td>
+                            <label for="appointment_date"><b>Appointment Date</b></label>
+                        </td>
+                        <td>
+                            <input type="date"  value="<%=appointmentDate%>"  name="appointment_date" class="form-control" id="appointmentDate" placeholder="Select Appointment Date">
+                            <small id="appointmentDate_alert"></small>
+                        </td>
+                        <td>
+                            <label for=">appointmentTime"><b>Appointment Time</b></label>
+                        </td>
+                        <td>
+                            <input type="time"  value="<%=appointmentTime%>"  name="appointment_time" class="form-control" id="appointmentTime" placeholder="Select Appointment Time">
+                            <small id="appointmentTime_alert"></small>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="hidden" name="id" value="<%=appointment.getId()%>">
+                            <button type="submit" onclick="GetData();" class="btn-submit">Delete</button>                        
+                        </td>
+                    </tr>
+                </table>
+
             </form>
+            <br><br>
+            <br>
+
+
+            <br><br>
         </div>
 
 
         <script>
-            function showFormData(event) {
-                event.preventDefault(); // Prevent the form from actually submitting
+            function GetData() {
+                console.log("Button clicked!"); // Add this line
 
-                // Get the form element
-                var form = document.getElementById("createAppointment");
+                if (validateForm()) {
+                    // Proceed with registration
+                    // You can add your registration logic here
 
-                // Create a new FormData object to capture form data
-                var formData = new FormData(form);
+                    var successMessage = "Appointment details Deleted successfully.";
+                    var errorMessage = "Failed to delete Appointment details.";
+                    var isSuccess = true;
 
-                // Prepare the data for display
-                var formDataText = "Form Data:\n";
-                for (var pair of formData.entries()) {
-                    formDataText += pair[0] + ": " + pair[1] + "\n";
+                    if (isSuccess) {
+                        alert(successMessage);
+                    } else {
+                        alert(errorMessage);
+                    }
                 }
-
-                // Display the form data on the page
-                var formDataDisplay = document.getElementById("formData");
-
-                console.log(formDataDisplay)
-                alert(formDataDisplay);
             }
         </script>
 
