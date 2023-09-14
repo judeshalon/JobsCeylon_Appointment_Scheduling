@@ -4,11 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 
 import com.entity.Appointment;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class AppointmentDao {
 
@@ -90,7 +93,7 @@ public class AppointmentDao {
         return d;
     }
 
-    public boolean updateAppointment(Appointment appointment) {
+    public boolean updateAppointment(Appointment appointment) throws ParseException {
         boolean isUpdated = false;
 
         try {
@@ -100,9 +103,16 @@ public class AppointmentDao {
                 ps.setInt(2, appointment.getJobseeker_id());
 
                 // Convert the appointment datetime String to a java.sql.Timestamp
-                Timestamp appointmentTimestamp = Timestamp.valueOf(appointment.getAppointment_datetime());
-                ps.setTimestamp(3, appointmentTimestamp);
+                Timestamp appointmentTimestamp = null;
+                try {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); // Adjust the date format as per your string format
+                    Date parsedDate = (Date) dateFormat.parse(appointment.getAppointment_datetime());
+                    appointmentTimestamp = new Timestamp(parsedDate.getTime());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
 
+                ps.setTimestamp(3, appointmentTimestamp);
                 ps.setInt(4, appointment.getId());
 
                 int rowsAffected = ps.executeUpdate();
