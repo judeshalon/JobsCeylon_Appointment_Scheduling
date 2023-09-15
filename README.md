@@ -32,8 +32,8 @@
 # The Project was developed using the following:
 Apache Version: 8.5.92
 
-JAVA Version: 8.5.92
+JAVA Version: 1.8.0.31
 
-Server Software: Apache/8.5.92 (Win64) JAVA/8.5.92
+Server Software: Apache/8.5.92 (Win64) JAVA/1.8.0.31
 
 MySQL Version: 8.0.26
