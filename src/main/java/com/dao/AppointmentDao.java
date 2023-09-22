@@ -118,6 +118,7 @@ public class AppointmentDao {
 
         return isUpdated;
     }
+    
 
     public boolean deleteAppointmentById(int id) {
         boolean f = false;

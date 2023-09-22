@@ -433,17 +433,18 @@
                             <label for="appointment_date"><b>Appointment Date</b></label>
                         </td>
                         <td>
-                            <input type="date"  value="<%=appointmentDate%>"  name="appointment_date" class="form-control" id="appointmentDate" placeholder="Select Appointment Date">
+                            <input type="date" value="<%= appointmentDate%>" name="appointment_date" class="form-control" id="appointmentDate" placeholder="Select Appointment Date">
                             <small id="appointmentDate_alert"></small>
                         </td>
                         <td>
-                            <label for=">appointmentTime"><b>Appointment Time</b></label>
+                            <label for="appointment_time"><b>Appointment Time</b></label>
                         </td>
                         <td>
-                            <input type="time"  value="<%=appointmentTime%>"  name="appointment_time" class="form-control" id="appointmentTime" placeholder="Select Appointment Time">
+                            <input type="time" value="<%= formattedTime%>" name="appointment_time" class="form-control" id="appointmentTime" placeholder="Select Appointment Time">
                             <small id="appointmentTime_alert"></small>
                         </td>
                     </tr>
+
                     <tr>
                         <td>
                             <input type="hidden" name="id" value="<%=appointment.getId()%>">
